@@ -1,0 +1,9 @@
+<div class="login-card">
+  <h2>Login</h2>
+  <form (submit)="$event.preventDefault(); submit()">
+    <input placeholder="Usuário ou email" [(ngModel)]="username" name="username" required />
+    <input type="password" placeholder="Senha" [(ngModel)]="password" name="password" required />
+    <button type="submit">Entrar</button>
+    <div *ngIf="error" class="error">{{ error }}</div>
+  </form>
+</div>

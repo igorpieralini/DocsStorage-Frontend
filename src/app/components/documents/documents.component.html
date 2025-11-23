@@ -1,0 +1,11 @@
+<div>
+  <h2>Meus Documentos</h2>
+  <app-upload></app-upload>
+  <ul>
+    <li *ngFor="let d of docs">
+      <span>{{ d.filename }}</span>
+      <button (click)="download(d)">Baixar</button>
+      <button (click)="delete(d)">Deletar</button>
+    </li>
+  </ul>
+</div>
