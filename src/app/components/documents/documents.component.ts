@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NgFor } from '@angular/common';
 import { UploadComponent } from '../upload/upload.component';
-import { DocumentService } from '../../services/document.service';
+import { GdriveService } from '../../services/gdrive.service';
 
 @Component({
   selector: 'app-documents',
@@ -14,7 +14,7 @@ export class DocumentsComponent {
 
   docs: any[] = [];
 
-  constructor(private documentService: DocumentService) {}
+  constructor(private documentService: GdriveService) {}
 
   ngOnInit() {
     this.documentService.getDocuments().subscribe(docs => {

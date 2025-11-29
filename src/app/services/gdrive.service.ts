@@ -6,9 +6,9 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class DocumentService {
+export class GdriveService{
 
-  private api = `${environment.apiUrl}/documents`;
+  private api = `${environment.apiUrl}/gdrive`;
 
   constructor(private http: HttpClient) {}
 

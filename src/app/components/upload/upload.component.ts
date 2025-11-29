@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { DocumentService } from '../../services/document.service';
+import { GdriveService } from '../../services/gdrive.service';
 
 @Component({
   selector: 'app-upload',
@@ -13,7 +13,7 @@ export class UploadComponent {
   selectedFile: File | null = null;
   message = '';
 
-  constructor(private documentService: DocumentService) {}
+  constructor(private documentService: GdriveService) {}
 
   onFileChange(event: any) {
     this.selectedFile = event.target.files[0];
