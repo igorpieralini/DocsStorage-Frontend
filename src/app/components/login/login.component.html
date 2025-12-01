@@ -1,9 +1,18 @@
-<div class="login-card">
-  <h2>Login</h2>
-  <form (submit)="$event.preventDefault(); submit()">
-    <input placeholder="Usuário ou email" [(ngModel)]="username" name="username" required />
-    <input type="password" placeholder="Senha" [(ngModel)]="password" name="password" required />
-    <button type="submit">Entrar</button>
-    <div *ngIf="error" class="error">{{ error }}</div>
-  </form>
+<div class="login-wrapper">
+  <div class="login-container">
+    <h2>Login</h2>
+    <form (submit)="onLogin()">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password" required>
+      </div>
+
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
 </div>

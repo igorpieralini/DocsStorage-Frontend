@@ -1,27 +1,35 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
-  standalone: true,
-  imports: [FormsModule, NgIf],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
+  standalone: true,
+  imports: [FormsModule]
 })
 export class LoginComponent {
 
-  username = '';
-  password = '';
-  error = '';
+  email: string = '';
+  password: string = '';
 
-  constructor(private auth: AuthService) {}
+  constructor(private authService: AuthService) {}
 
-  submit() {
-    this.auth.login({ username: this.username, password: this.password }).subscribe({
-      next: () => {},
-      error: () => this.error = 'Usuário ou senha inválidos'
+  onLogin() {
+    this.authService.login(this.email, this.password).subscribe({
+      next: (res) => {
+        if (res.success) {
+          alert('Login realizado com sucesso!');
+          console.log('Usuário:', res.user);
+        } else {
+          alert(res.message);
+        }
+      },
+      error: (err) => {
+        alert('Erro ao conectar com o servidor.');
+        console.error(err);
+      }
     });
   }
 }
