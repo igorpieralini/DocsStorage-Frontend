@@ -1,0 +1,43 @@
+<header class="main-header">
+  <div class="header-content">
+    <div class="header-left">
+      <button class="menu-toggle" (click)="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+      </button>
+      <h1 class="app-title">DocsStorage</h1>
+    </div>
+    
+    <div class="header-center">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="text" placeholder="Pesquisar documentos..." class="search-input">
+      </div>
+    </div>
+    
+    <div class="header-right">
+      <div class="user-menu">
+        <button class="user-avatar" (click)="toggleUserMenu()">
+          <i class="fas fa-user-circle"></i>
+          <span class="username">{{currentUser?.username || 'Usuário'}}</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        
+        <div class="user-dropdown" [class.show]="showUserMenu">
+          <div class="dropdown-item">
+            <i class="fas fa-user"></i>
+            <span>Perfil</span>
+          </div>
+          <div class="dropdown-item">
+            <i class="fas fa-cog"></i>
+            <span>Configurações</span>
+          </div>
+          <div class="dropdown-divider"></div>
+          <div class="dropdown-item logout" (click)="logout()">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Sair</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

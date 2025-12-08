@@ -1,18 +1,143 @@
-<div class="login-wrapper">
+<div class="login-scene">
+  <!-- Background dinâmico -->
+  <div class="background-animation">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+  </div>
+
+  <!-- Container principal -->
   <div class="login-container">
-    <h2>Login</h2>
-    <form (submit)="onLogin()">
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" [(ngModel)]="email" name="email" required>
+    <!-- Lado esquerdo - Apresentação -->
+    <div class="login-presentation">
+      <div class="brand-section">
+        <div class="logo-container">
+          <div class="logo-icon">
+            <i class="fas fa-cloud-arrow-up"></i>
+          </div>
+          <h1 class="brand-name">DocsStorage</h1>
+        </div>
+        
+        <div class="welcome-content">
+          <h2 class="welcome-title">Bem-vindo de volta!</h2>
+          <p class="welcome-subtitle">Gerencie seus documentos de forma inteligente e segura</p>
+          
+          <div class="features-preview">
+            <div class="feature-item">
+              <i class="fas fa-shield-alt"></i>
+              <span>Segurança avançada</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-sync"></i>
+              <span>Sincronização em tempo real</span>
+            </div>
+            <div class="feature-item">
+              <i class="fas fa-users"></i>
+              <span>Colaboração em equipe</span>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label for="password">Senha</label>
-        <input type="password" id="password" [(ngModel)]="password" name="password" required>
+    <!-- Lado direito - Formulário -->
+    <div class="login-form-section">
+      <div class="form-container">
+        <div class="form-header">
+          <h3>Entrar na conta</h3>
+          <p>Digite suas credenciais para acessar</p>
+        </div>
+
+        <form (ngSubmit)="onLogin()" class="login-form">
+          <!-- Campo Email -->
+          <div class="input-group">
+            <div class="input-wrapper" [class.focused]="emailFocused" [class.filled]="email.length > 0">
+              <i class="fas fa-envelope input-icon"></i>
+              <input 
+                type="email" 
+                id="email" 
+                [(ngModel)]="email" 
+                name="email" 
+                required
+                [disabled]="isLoading"
+                (focus)="emailFocused = true"
+                (blur)="emailFocused = false"
+                class="form-input">
+              <label for="email" class="form-label">Email</label>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <!-- Campo Senha -->
+          <div class="input-group">
+            <div class="input-wrapper" [class.focused]="passwordFocused" [class.filled]="password.length > 0">
+              <i class="fas fa-lock input-icon"></i>
+              <input 
+                [type]="showPassword ? 'text' : 'password'" 
+                id="password" 
+                [(ngModel)]="password" 
+                name="password" 
+                required
+                [disabled]="isLoading"
+                (focus)="passwordFocused = true"
+                (blur)="passwordFocused = false"
+                class="form-input">
+              <label for="password" class="form-label">Senha</label>
+              <button type="button" class="password-toggle" (click)="togglePassword()">
+                <i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+              </button>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <!-- Opções extras -->
+          <div class="form-options">
+            <label class="checkbox-container">
+              <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe">
+              <span class="checkmark"></span>
+              <span class="checkbox-text">Lembrar de mim</span>
+            </label>
+            <a href="#" class="forgot-password">Esqueceu a senha?</a>
+          </div>
+
+          <!-- Botão de login -->
+          <button type="submit" [disabled]="isLoading" class="login-button">
+            <div class="button-content">
+              <div *ngIf="isLoading" class="loading-spinner">
+                <div class="spinner"></div>
+              </div>
+              <span class="button-text">{{ isLoading ? 'Entrando...' : 'Entrar' }}</span>
+              <i *ngIf="!isLoading" class="fas fa-arrow-right button-arrow"></i>
+            </div>
+          </button>
+
+          <!-- Separador -->
+          <div class="divider">
+            <span>ou continue com</span>
+          </div>
+
+          <!-- Login social -->
+          <div class="social-login">
+            <button type="button" class="social-btn google-btn">
+              <i class="fab fa-google"></i>
+              <span>Google</span>
+            </button>
+            <button type="button" class="social-btn microsoft-btn">
+              <i class="fab fa-microsoft"></i>
+              <span>Microsoft</span>
+            </button>
+          </div>
+        </form>
+
+        <!-- Footer -->
+        <div class="form-footer">
+          <p>Não tem uma conta? <a href="#" class="signup-link">Criar conta</a></p>
+        </div>
       </div>
-
-      <button type="submit">Entrar</button>
-    </form>
+    </div>
   </div>
 </div>

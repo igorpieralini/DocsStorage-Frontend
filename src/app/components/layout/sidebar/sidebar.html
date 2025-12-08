@@ -1,0 +1,51 @@
+<aside class="main-sidebar" [class.collapsed]="collapsed">
+  <nav class="sidebar-nav">
+    <div class="nav-section">
+      <h3 class="nav-title">Principal</h3>
+      <ul class="nav-list">
+        <li class="nav-item" [class.active]="activeRoute === 'dashboard'">
+          <a href="#" class="nav-link" (click)="setActive('dashboard')">
+            <i class="fas fa-home"></i>
+            <span class="nav-text">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item" [class.active]="activeRoute === 'documents'">
+          <a href="#" class="nav-link" (click)="setActive('documents')">
+            <i class="fas fa-file-alt"></i>
+            <span class="nav-text">Documentos</span>
+          </a>
+        </li>
+        <li class="nav-item" [class.active]="activeRoute === 'upload'">
+          <a href="#" class="nav-link" (click)="setActive('upload')">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <span class="nav-text">Upload</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <h3 class="nav-title">Integração</h3>
+      <ul class="nav-list">
+        <li class="nav-item" [class.active]="activeRoute === 'gdrive'">
+          <a href="#" class="nav-link" (click)="setActive('gdrive')">
+            <i class="fab fa-google-drive"></i>
+            <span class="nav-text">Google Drive</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <h3 class="nav-title">Sistema</h3>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="fas fa-cog"></i>
+            <span class="nav-text">Configurações</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</aside>

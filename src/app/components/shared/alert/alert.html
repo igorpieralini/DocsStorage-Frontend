@@ -1,0 +1,30 @@
+<div *ngIf="visible" class="alert-overlay" (click)="onOverlayClick($event)">
+  <div class="alert-container" [class]="'alert-' + type">
+    <div class="alert-header">
+      <div class="alert-icon">
+        <i [class]="getIcon()"></i>
+      </div>
+      <div class="alert-content">
+        <h4 *ngIf="title" class="alert-title">{{ title }}</h4>
+        <p class="alert-message">{{ message }}</p>
+      </div>
+      <button *ngIf="closable" class="alert-close" (click)="close()">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    
+    <div *ngIf="actions && actions.length > 0" class="alert-actions">
+      <button 
+        *ngFor="let action of actions" 
+        class="alert-btn"
+        [class]="'btn-' + action.type"
+        (click)="onActionClick(action)">
+        {{ action.label }}
+      </button>
+    </div>
+    
+    <div *ngIf="showProgress" class="alert-progress">
+      <div class="progress-bar" [style.width.%]="progress"></div>
+    </div>
+  </div>
+</div>
