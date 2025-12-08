@@ -22,13 +22,14 @@ export class LoginComponent {
         if (res.success) {
           alert('Login realizado com sucesso!');
           console.log('Usuário:', res.user);
+          this.authService.saveToken(res.token || '');
         } else {
-          alert(res.message);
+          alert(res.message || 'Erro ao fazer login');
         }
       },
       error: (err) => {
-        alert('Erro ao conectar com o servidor.');
-        console.error(err);
+        console.error('Erro completo:', err);
+        alert('Erro ao conectar com o servidor: ' + (err.message || 'Verifique se o backend está rodando em http://localhost:5000'));
       }
     });
   }
