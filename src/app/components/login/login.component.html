@@ -122,11 +122,11 @@
 
           <!-- Login social -->
           <div class="social-login">
-            <button type="button" class="social-btn google-btn">
+            <button type="button" class="social-btn google-btn" (click)="onGoogleLogin()" [disabled]="isLoading">
               <i class="fab fa-google"></i>
               <span>Google</span>
             </button>
-            <button type="button" class="social-btn microsoft-btn">
+            <button type="button" class="social-btn microsoft-btn" (click)="onMicrosoftLogin()" [disabled]="isLoading">
               <i class="fab fa-microsoft"></i>
               <span>Microsoft</span>
             </button>

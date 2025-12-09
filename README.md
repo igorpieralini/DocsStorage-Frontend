@@ -1,52 +1,57 @@
-# Frontend
+# 🎨 DocsStorage Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.0.
+Interface moderna em Angular com autenticação OAuth (Google/Microsoft) e design system customizado.
 
-## Development server
+## 🚀 Tecnologias
+- Angular 18+ (Standalone Components)
+- TypeScript
+- OAuth 2.0 (Google/Microsoft Graph)
+- Design System Moderno
+- SCSS Animations
 
-To start a local development server, run:
-
+## ⚡ Setup
 ```bash
+npm install
 ng serve
 ```
+**App:** http://localhost:4200
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🔐 OAuth Configuration
 
-## Code scaffolding
+**Google OAuth:**
+1. [Google Console](https://console.cloud.google.com/) → Criar projeto
+2. Ativar APIs: Google Drive + Google+ 
+3. Credenciais → OAuth Client ID
+4. Atualizar em `services/google-auth-new.service.ts`
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+**Microsoft OAuth:**
+1. [Azure Portal](https://portal.azure.com/) → App Registration
+2. Permissões: User.Read + Files.ReadWrite.All
+3. Atualizar em `services/microsoft-auth-new.service.ts`
 
-```bash
-ng generate component component-name
+## ✨ Funcionalidades
+- 🔑 Login tradicional + OAuth social
+- 🎨 Interface moderna e responsiva  
+- 🔔 Sistema de alertas customizado
+- 📤 Upload de documentos
+- ☁️ Integração Google Drive/OneDrive
+- 👤 Dashboard com estatísticas
+- 📱 Design mobile-first
+
+## 🏗️ Estrutura
+```
+src/app/
+├── components/
+│   ├── layout/          # Header, Sidebar, Footer
+│   ├── login/           # Tela de login OAuth
+│   ├── dashboard/       # Dashboard principal
+│   └── shared/alert/    # Sistema de alertas
+├── services/            # Auth, OAuth, API
+└── config/              # Configurações OAuth
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+---
+**Frontend App | DocsStorage 2025**
 
 ```bash
 ng e2e
