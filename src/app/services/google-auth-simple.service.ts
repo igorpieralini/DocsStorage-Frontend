@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { OAuthConfig } from '../config/oauth.config';
+import { AuthService } from './auth.service';
 
 export interface GoogleUser {
   id: string;
@@ -16,7 +17,7 @@ export class GoogleAuthSimpleService {
   private currentUser: GoogleUser | null = null;
   private baseUrl = 'http://127.0.0.1:5000/api';
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private authService: AuthService) {
     console.log('✅ GoogleAuthSimpleService inicializado');
   }
 
@@ -73,6 +74,10 @@ export class GoogleAuthSimpleService {
           email: response.user.email,
           picture: response.user.picture
         };
+        // Salva o token JWT retornado pelo backend
+        if (response.token) {
+          this.authService.saveToken(response.token);
+        }
         return this.currentUser;
       }
 
