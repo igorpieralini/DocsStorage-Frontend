@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -14,7 +14,7 @@ import { MicrosoftAuthSimpleService } from '../../services/microsoft-auth-simple
   standalone: true,
   imports: [FormsModule, CommonModule]
 })
-export class LoginComponent {
+export class LoginComponent implements OnDestroy {
 
   email: string = '';
   password: string = '';
@@ -32,7 +32,35 @@ export class LoginComponent {
     private alertService: AlertService,
     private googleAuth: GoogleAuthSimpleService,
     private microsoftAuth: MicrosoftAuthSimpleService
-  ) {}
+  ) {
+    // Escuta mensagens do popup de autenticação
+    window.addEventListener('message', this.handleAuthMessage.bind(this));
+  }
+
+  ngOnDestroy() {
+    // Remove o listener quando o componente for destruído
+    window.removeEventListener('message', this.handleAuthMessage.bind(this));
+  }
+
+  private handleAuthMessage(event: MessageEvent) {
+    // Verifica se a mensagem vem da mesma origem
+    if (event.origin !== window.location.origin) {
+      return;
+    }
+
+    const data = event.data;
+
+    if (data.type === 'google-auth-success') {
+      console.log('✅ Login Google bem-sucedido via popup:', data.user);
+      this.alertService.success(`Bem-vindo, ${data.user.name}!`, 'Login Google Realizado');
+      setTimeout(() => {
+        this.router.navigate(['/dashboard']);
+      }, 2000);
+    } else if (data.type === 'google-auth-error') {
+      console.error('❌ Erro no login Google via popup:', data.error);
+      this.alertService.error('Erro ao fazer login com Google', 'Falha na Autenticação');
+    }
+  }
 
   togglePassword() {
     this.showPassword = !this.showPassword;
@@ -117,23 +145,9 @@ export class LoginComponent {
   }
 
   // Login com Google
-  async onGoogleLogin() {
-    try {
-      this.isLoading = true;
-      const user = await this.googleAuth.signIn();
-      
-      if (user) {
-        this.alertService.success(`Bem-vindo, ${user.name}!`, 'Login Google Realizado');
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 2000);
-      }
-    } catch (error) {
-      console.error('Erro no login Google:', error);
-      this.alertService.error('Erro ao fazer login com Google', 'Falha na Autenticação');
-    } finally {
-      this.isLoading = false;
-    }
+  onGoogleLogin() {
+    console.log('🔵 Botão Google clicado - Redirecionando...');
+    this.googleAuth.signIn();
   }
 
   // Login com Microsoft

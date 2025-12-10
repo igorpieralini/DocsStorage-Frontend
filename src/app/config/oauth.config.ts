@@ -3,9 +3,9 @@
 
 export const OAuthConfig = {
   google: {
-    clientId: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com',
+    clientId: '141549696314-a9lmve9lksegeisopjc881npe71vncas.apps.googleusercontent.com',
     scopes: 'profile email https://www.googleapis.com/auth/drive.file',
-    redirectUri: window.location.origin
+    redirectUri: 'http://localhost:4200/oauth/callback'
   },
   
   microsoft: {
