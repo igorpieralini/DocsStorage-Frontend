@@ -458,9 +458,9 @@
 
 /* Login Social */
 .social-login {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 2rem;
 }
 

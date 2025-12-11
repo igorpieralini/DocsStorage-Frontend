@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { AlertService } from '../../services/alert.service';
 import { GoogleAuthSimpleService } from '../../services/google-auth-simple.service';
-import { MicrosoftAuthSimpleService } from '../../services/microsoft-auth-simple.service';
 
 @Component({
   selector: 'app-login',
@@ -30,8 +29,7 @@ export class LoginComponent implements OnDestroy {
     private authService: AuthService,
     private router: Router,
     private alertService: AlertService,
-    private googleAuth: GoogleAuthSimpleService,
-    private microsoftAuth: MicrosoftAuthSimpleService
+    private googleAuth: GoogleAuthSimpleService
   ) {
     // Escuta mensagens do popup de autenticação
     window.addEventListener('message', this.handleAuthMessage.bind(this));
@@ -148,25 +146,5 @@ export class LoginComponent implements OnDestroy {
   onGoogleLogin() {
     console.log('🔵 Botão Google clicado - Redirecionando...');
     this.googleAuth.signIn();
-  }
-
-  // Login com Microsoft
-  async onMicrosoftLogin() {
-    try {
-      this.isLoading = true;
-      const user = await this.microsoftAuth.signIn();
-      
-      if (user) {
-        this.alertService.success(`Bem-vindo, ${user.displayName}!`, 'Login Microsoft Realizado');
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 2000);
-      }
-    } catch (error) {
-      console.error('Erro no login Microsoft:', error);
-      this.alertService.error('Erro ao fazer login com Microsoft', 'Falha na Autenticação');
-    } finally {
-      this.isLoading = false;
-    }
   }
 }
