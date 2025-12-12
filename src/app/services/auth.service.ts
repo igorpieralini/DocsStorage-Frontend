@@ -27,6 +27,20 @@ export class AuthService {
     return request;
   }
 
+  register(name: string, email: string, password: string): Observable<any> {
+    const registerUrl = `${this.baseUrl}/auth/register`;
+    console.log('🔗 Fazendo requisição para:', registerUrl);
+    console.log('📤 Dados enviados:', { name, email, password: '***' });
+    const req = this.http.post(registerUrl, { name, email, password });
+
+    req.subscribe({
+      next: (response) => console.log('📥 Resposta (register):', response),
+      error: (error) => console.error('❌ Erro na requisição (register):', error)
+    });
+
+    return req;
+  }
+
   saveToken(token: string) {
     localStorage.setItem('token', token);
   }

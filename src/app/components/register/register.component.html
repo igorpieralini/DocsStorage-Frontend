@@ -1,0 +1,88 @@
+<div class="login-scene">
+  <div class="background-animation" aria-hidden="true">
+    <div class="floating-shapes">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+      <div class="shape shape-4"></div>
+      <div class="shape shape-5"></div>
+    </div>
+  </div>
+
+  <div class="login-container">
+    <div class="login-presentation" aria-hidden="true">
+      <div class="brand-section">
+        <div class="logo-container">
+          <div class="logo-icon"><i class="fas fa-cloud-arrow-up"></i></div>
+          <h1 class="brand-name">DocsStorage</h1>
+        </div>
+        <div class="welcome-content">
+          <h2 class="welcome-title">Bem-vindo!</h2>
+          <p class="welcome-subtitle">Crie sua conta para começar a gerenciar documentos de forma segura.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-form-section">
+      <div class="form-container">
+        <div class="form-header">
+          <h3>Criar conta</h3>
+          <p>Preencha os dados para criar sua conta</p>
+        </div>
+
+        <form (ngSubmit)="onRegister()" class="login-form">
+          <!-- Username -->
+          <div class="input-group">
+            <div class="input-wrapper" [class.focused]="usernameFocused" [class.filled]="username.length > 0">
+              <i class="fas fa-user input-icon"></i>
+              <input id="username" name="username" [(ngModel)]="username" required [disabled]="isLoading" (focus)="usernameFocused = true" (blur)="usernameFocused = false" class="form-input" />
+              <label for="username" class="form-label">Nome de usuário</label>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="input-group">
+            <div class="input-wrapper" [class.focused]="emailFocused" [class.filled]="email.length > 0">
+              <i class="fas fa-envelope input-icon"></i>
+              <input id="email" name="email" type="email" [(ngModel)]="email" required [disabled]="isLoading" (focus)="emailFocused = true" (blur)="emailFocused = false" class="form-input" />
+              <label for="email" class="form-label">Email</label>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <!-- Password -->
+          <div class="input-group">
+            <div class="input-wrapper" [class.focused]="passwordFocused" [class.filled]="password.length > 0">
+              <i class="fas fa-lock input-icon"></i>
+              <input id="password" name="password" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" required [disabled]="isLoading" (focus)="passwordFocused = true" (blur)="passwordFocused = false" class="form-input" />
+              <label for="password" class="form-label">Senha</label>
+              <button type="button" class="password-toggle" (click)="togglePassword()"><i [class]="showPassword ? 'fas fa-eye-slash' : 'fas fa-eye'"></i></button>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="input-group">
+            <div class="input-wrapper" [class.focused]="confirmFocused" [class.filled]="confirmPassword.length > 0">
+              <i class="fas fa-lock input-icon"></i>
+              <input id="confirm" name="confirm" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="confirmPassword" required [disabled]="isLoading" (focus)="confirmFocused = true" (blur)="confirmFocused = false" class="form-input" />
+              <label for="confirm" class="form-label">Confirmar senha</label>
+              <div class="input-border"></div>
+            </div>
+          </div>
+
+          <button type="submit" [disabled]="isLoading" class="login-button">
+            <div class="button-content">
+              <span class="button-text">{{ isLoading ? 'Cadastrando...' : 'Criar conta' }}</span>
+            </div>
+          </button>
+        </form>
+
+        <div class="form-footer">
+          <p>Já tem uma conta? <a [routerLink]="['/login']" class="signup-link">Entrar</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
