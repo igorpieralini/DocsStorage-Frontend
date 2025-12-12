@@ -17,8 +17,13 @@
     <div class="header-right">
       <div class="user-menu">
         <button class="user-avatar" (click)="toggleUserMenu()">
-          <i class="fas fa-user-circle"></i>
-          <span class="username">{{currentUser?.username || 'Usuário'}}</span>
+          <ng-container *ngIf="userPicture; else defaultAvatar">
+            <img [src]="userPicture" alt="Foto do usuário" class="avatar-img" />
+          </ng-container>
+          <ng-template #defaultAvatar>
+            <i class="fas fa-user-circle"></i>
+          </ng-template>
+          <span class="username">{{userName}}</span>
           <i class="fas fa-chevron-down"></i>
         </button>
         

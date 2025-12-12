@@ -1,3 +1,12 @@
+.avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e9ecef;
+  border: 2px solid #007bff;
+}
+
 .main-header {
   background: #fff;
   border-bottom: 1px solid #e9ecef;

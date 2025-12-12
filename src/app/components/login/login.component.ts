@@ -14,6 +14,8 @@ import { GoogleAuthSimpleService } from '../../services/google-auth-simple.servi
   imports: [FormsModule, CommonModule]
 })
 export class LoginComponent implements OnDestroy {
+  private lastGoogleCode: string | null = null;
+  isGooglePopupOpen: boolean = false;
 
   email: string = '';
   password: string = '';
@@ -40,8 +42,7 @@ export class LoginComponent implements OnDestroy {
     window.removeEventListener('message', this.handleAuthMessage.bind(this));
   }
 
-  private handleAuthMessage(event: MessageEvent) {
-    // Verifica se a mensagem vem da mesma origem
+  private async handleAuthMessage(event: MessageEvent) {
     if (event.origin !== window.location.origin) {
       return;
     }
@@ -50,6 +51,7 @@ export class LoginComponent implements OnDestroy {
 
     if (data.type === 'google-auth-success') {
       console.log('✅ Login Google bem-sucedido via popup:', data.user);
+      this.googleAuth.setCurrentUser(data.user);
       this.alertService.success(`Bem-vindo, ${data.user.name}!`, 'Login Google Realizado');
       setTimeout(() => {
         this.router.navigate(['/dashboard']);
@@ -109,7 +111,6 @@ export class LoginComponent implements OnDestroy {
         let errorMessage = 'Erro inesperado. Tente novamente.';
         let title = 'Erro';
         
-        // Tratamento específico para cada tipo de erro
         switch (err.status) {
           case 0:
             errorMessage = 'Não foi possível conectar ao servidor. Verifique se o backend está rodando.';
@@ -142,9 +143,17 @@ export class LoginComponent implements OnDestroy {
     });
   }
 
-  // Login com Google
   onGoogleLogin() {
+    if (this.isGooglePopupOpen) return;
+    this.isGooglePopupOpen = true;
     console.log('🔵 Botão Google clicado - Redirecionando...');
-    this.googleAuth.signIn();
+    const popup = this.googleAuth.signIn();
+
+    const checkPopupClosed = setInterval(() => {
+      if (popup && popup.closed) {
+        clearInterval(checkPopupClosed);
+        this.isGooglePopupOpen = false;
+      }
+    }, 500);
   }
 }

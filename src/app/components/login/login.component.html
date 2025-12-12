@@ -122,7 +122,7 @@
 
           <!-- Login social -->
           <div class="social-login">
-            <button type="button" class="social-btn google-btn" (click)="onGoogleLogin()" [disabled]="isLoading">
+            <button type="button" class="social-btn google-btn" (click)="onGoogleLogin()" [disabled]="isLoading || isGooglePopupOpen">
               <i class="fab fa-google"></i>
               <span>Google</span>
             </button>
