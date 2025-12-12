@@ -25,7 +25,6 @@ import { AlertService } from '../../services/alert.service';
 export class OAuthCallbackComponent implements OnInit {
   private alreadyHandled = false;
   private callbackSubscription: any;
-  // Global flag to ensure single execution per popup (window scope)
   private static globalCallbackHandled = false;
 
   constructor(
@@ -36,9 +35,8 @@ export class OAuthCallbackComponent implements OnInit {
   ) {}
 
   async ngOnInit() {
-    // Garante execução única por popup (window escopo global)
+
     if ((window as any).googleCallbackAlreadyHandled || OAuthCallbackComponent.globalCallbackHandled) {
-      console.warn('⚠️ Callback já processado neste popup. Ignorando.');
       window.close();
       return;
     }
@@ -49,13 +47,12 @@ export class OAuthCallbackComponent implements OnInit {
       if (this.alreadyHandled) return;
       this.alreadyHandled = true;
       const code = params['code'];
-      if (code) {
-        console.log('🟢 [OAuthCallback] code recebido na URL:', code, '| horário:', new Date().toISOString());
-      }
       const error = params['error'];
 
       if (error) {
-        console.error('❌ Erro no OAuth:', error);
+        if (this.callbackSubscription) {
+          this.callbackSubscription.unsubscribe();
+        }
         if (window.opener) {
           window.opener.postMessage({ type: 'google-auth-error', error: error }, window.location.origin);
           window.close();
@@ -68,6 +65,9 @@ export class OAuthCallbackComponent implements OnInit {
 
       if (!code) {
         // Sem código, fecha o popup ou redireciona
+        if (this.callbackSubscription) {
+          this.callbackSubscription.unsubscribe();
+        }
         if (window.opener) {
           window.close();
         } else {
@@ -78,10 +78,15 @@ export class OAuthCallbackComponent implements OnInit {
       }
 
       try {
-        console.log('✅ Código recebido do Google, processando...');
         const user = await this.googleAuth.handleCallback(code);
 
+        // Unsubscribe da query params para evitar reentrância
+        if (this.callbackSubscription) {
+          this.callbackSubscription.unsubscribe();
+        }
+
         if (user) {
+
           // Se estiver em popup, fecha e notifica sucesso
           if (window.opener) {
             window.opener.postMessage({ 
@@ -91,6 +96,7 @@ export class OAuthCallbackComponent implements OnInit {
             }, window.location.origin);
             window.close();
           } else {
+
             // Se não estiver em popup, redireciona normalmente
             this.alertService.success(`Bem-vindo, ${user.name}!`, 'Login Google Realizado');
             setTimeout(() => {
@@ -98,6 +104,7 @@ export class OAuthCallbackComponent implements OnInit {
             }, 1500);
           }
         } else {
+
           // Se o backend retornou erro de code expirado/invalid_grant
           if (window.opener) {
             window.opener.postMessage({ type: 'google-auth-error', error: 'Código expirado ou inválido. Faça login novamente.' }, window.location.origin);
@@ -106,11 +113,18 @@ export class OAuthCallbackComponent implements OnInit {
             this.alertService.error('Código expirado, já utilizado ou inválido. Faça login novamente.', 'Erro Google OAuth');
             this.router.navigate(['/login']);
           }
+
         }
       } catch (error: any) {
-        console.error('❌ Erro ao processar callback:', error);
+
+        // Unsubscribe em caso de erro também
+        if (this.callbackSubscription) {
+          this.callbackSubscription.unsubscribe();
+        }
+
         // Se o backend retornou erro de code expirado/invalid_grant
         if (error?.error?.message && error.error.message.includes('expirado')) {
+
           if (window.opener) {
             window.opener.postMessage({ type: 'google-auth-error', error: error.error.message }, window.location.origin);
             window.close();
@@ -118,7 +132,9 @@ export class OAuthCallbackComponent implements OnInit {
             this.alertService.error(error.error.message, 'Erro Google OAuth');
             this.router.navigate(['/login']);
           }
+
         } else {
+
           if (window.opener) {
             window.opener.postMessage({ type: 'google-auth-error', error: 'Processing error' }, window.location.origin);
             window.close();
@@ -126,6 +142,7 @@ export class OAuthCallbackComponent implements OnInit {
             this.alertService.error('Erro ao processar login com Google', 'Falha na Autenticação');
             this.router.navigate(['/login']);
           }
+
         }
       }
     });

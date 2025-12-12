@@ -50,14 +50,12 @@ export class LoginComponent implements OnDestroy {
     const data = event.data;
 
     if (data.type === 'google-auth-success') {
-      console.log('✅ Login Google bem-sucedido via popup:', data.user);
       this.googleAuth.setCurrentUser(data.user);
       this.alertService.success(`Bem-vindo, ${data.user.name}!`, 'Login Google Realizado');
       setTimeout(() => {
         this.router.navigate(['/dashboard']);
       }, 2000);
     } else if (data.type === 'google-auth-error') {
-      console.error('❌ Erro no login Google via popup:', data.error);
       this.alertService.error('Erro ao fazer login com Google', 'Falha na Autenticação');
     }
   }
@@ -85,7 +83,6 @@ export class LoginComponent implements OnDestroy {
     
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
-        console.log('✅ Resposta recebida:', res);
         this.isLoading = false;
         
         if (res.success) {
@@ -137,16 +134,15 @@ export class LoginComponent implements OnDestroy {
             title = 'Erro';
         }
         
-        console.log('🚨 Mostrando alert:', { title, errorMessage });
         this.alertService.error(errorMessage, title);
       }
     });
   }
 
   onGoogleLogin() {
+
     if (this.isGooglePopupOpen) return;
     this.isGooglePopupOpen = true;
-    console.log('🔵 Botão Google clicado - Redirecionando...');
     const popup = this.googleAuth.signIn();
 
     const checkPopupClosed = setInterval(() => {
@@ -155,5 +151,6 @@ export class LoginComponent implements OnDestroy {
         this.isGooglePopupOpen = false;
       }
     }, 500);
+
   }
 }
