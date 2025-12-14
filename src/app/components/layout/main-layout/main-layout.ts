@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header';
 import { SidebarComponent } from '../sidebar/sidebar';
 import { FooterComponent } from '../footer/footer';
-import { DashboardComponent } from '../../dashboard/dashboard';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-main-layout',
@@ -12,20 +12,15 @@ import { DashboardComponent } from '../../dashboard/dashboard';
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    DashboardComponent
+    RouterModule
   ],
   templateUrl: './main-layout.html',
   styleUrl: './main-layout.css'
 })
 export class MainLayoutComponent {
   sidebarCollapsed = false;
-  activeRoute = 'dashboard';
 
   toggleSidebar() {
     this.sidebarCollapsed = !this.sidebarCollapsed;
-  }
-
-  onRouteChange(route: string) {
-    this.activeRoute = route;
   }
 }

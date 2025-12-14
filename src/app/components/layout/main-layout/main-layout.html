@@ -2,27 +2,11 @@
   <app-header (sidebarToggle)="toggleSidebar()"></app-header>
   
   <div class="app-body">
-    <app-sidebar 
-      [collapsed]="sidebarCollapsed" 
-      (routeChange)="onRouteChange($event)">
-    </app-sidebar>
+    <app-sidebar [collapsed]="sidebarCollapsed"></app-sidebar>
     
     <main class="main-content" [class.expanded]="sidebarCollapsed">
       <div class="content-wrapper">
-        <!-- Conteúdo dinâmico baseado na rota ativa -->
-        <app-dashboard *ngIf="activeRoute === 'dashboard'"></app-dashboard>
-        <div *ngIf="activeRoute === 'documents'" class="page-placeholder">
-          <h2>Documentos</h2>
-          <p>Página em desenvolvimento</p>
-        </div>
-        <div *ngIf="activeRoute === 'upload'" class="page-placeholder">
-          <h2>Upload</h2>
-          <p>Página em desenvolvimento</p>
-        </div>
-        <div *ngIf="activeRoute === 'gdrive'" class="page-placeholder">
-          <h2>Google Drive</h2>
-          <p>Página em desenvolvimento</p>
-        </div>
+        <router-outlet></router-outlet>
       </div>
     </main>
   </div>

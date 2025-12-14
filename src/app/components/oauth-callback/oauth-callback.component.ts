@@ -89,12 +89,17 @@ export class OAuthCallbackComponent implements OnInit {
 
           // Se estiver em popup, fecha e notifica sucesso
           if (window.opener) {
+            // Passa também o token para a janela principal salvar localmente
+            const tokenData = (window as any).localStorage?.getItem('token_data') || null;
+            const sessionToken = (window as any).sessionStorage?.getItem('token_session') || null;
+            const token = sessionToken || (tokenData ? JSON.parse(tokenData).token : null);
             window.opener.postMessage({ 
               type: 'google-auth-success', 
               user: user,
-              code: code
+              code: code,
+              token: token
             }, window.location.origin);
-            window.close();
+            try { window.close(); } catch {}
           } else {
 
             // Se não estiver em popup, redireciona normalmente

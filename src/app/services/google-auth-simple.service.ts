@@ -23,11 +23,23 @@ export class GoogleAuthSimpleService {
     setCurrentUser(user: GoogleUser | null) {
       this.currentUser = user;
       this.userChanged$.next(user);
+      // Persiste junto com AuthService (usa mesma storage do token)
+      if (user) {
+        const token = this.authService.getToken();
+        const remember = !!localStorage.getItem('token_data');
+        this.authService.setUser(user, remember);
+      }
     }
   private baseUrl = 'http://127.0.0.1:5000/api';
 
   constructor(private http: HttpClient, private authService: AuthService) {
     console.log('✅ GoogleAuthSimpleService inicializado');
+    // Reidrata usuário Google do AuthService se disponível
+    const user = this.authService.getUser();
+    if (user && (user.google_id || user.picture || user.profile_picture)) {
+      this.currentUser = user;
+      this.userChanged$.next(user);
+    }
   }
 
   signIn(): Window | null {

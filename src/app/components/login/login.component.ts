@@ -50,10 +50,14 @@ export class LoginComponent implements OnDestroy {
 
     if (data.type === 'google-auth-success') {
       this.googleAuth.setCurrentUser(data.user);
+      if (data.token) {
+        // Salva como sessão padrão (não lembrar) e persiste usuário
+        this.authService.saveToken(data.token, false, data.user);
+        this.authService.setUser(data.user, false);
+      }
       this.alertService.success(`Bem-vindo, ${data.user.name}!`, 'Login Google Realizado');
-      setTimeout(() => {
-        this.router.navigate(['/dashboard']);
-      }, 2000);
+      this.isGooglePopupOpen = false;
+      this.router.navigate(['/dashboard']);
     } else if (data.type === 'google-auth-error') {
       this.alertService.error('Erro ao fazer login com Google', 'Falha na Autenticação');
     }
@@ -85,12 +89,10 @@ export class LoginComponent implements OnDestroy {
         this.isLoading = false;
         
         if (res.success) {
+          this.authService.saveToken(res.token || '', this.rememberMe, res.user);
+          this.authService.setUser(res.user, this.rememberMe);
           this.alertService.success('Login realizado com sucesso!', 'Bem-vindo!');
-          this.authService.saveToken(res.token || '');
-          
-          setTimeout(() => {
-            this.router.navigate(['/dashboard']);
-          }, 2000);
+          this.router.navigate(['/dashboard']);
         } else {
           this.alertService.error(res.message || 'Erro ao fazer login', 'Falha na autenticação');
         }

@@ -64,8 +64,10 @@ export class RegisterComponent {
       next: (res) => {
         this.isLoading = false;
         if (res.success) {
+          this.authService.saveToken(res.token || '', false, res.user);
+          this.authService.setUser(res.user, false);
           this.alertService.success('Conta criada com sucesso!', 'Cadastro');
-          setTimeout(() => this.router.navigate(['/login']), 1500);
+          this.router.navigate(['/dashboard']);
         } else {
           this.alertService.error(res.message || 'Erro ao cadastrar', 'Erro');
         }

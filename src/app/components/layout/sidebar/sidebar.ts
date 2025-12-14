@@ -1,20 +1,13 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.html',
-  styleUrl: './sidebar.css'
+  styleUrls: ['./sidebar.css']
 })
 export class SidebarComponent {
   @Input() collapsed = false;
-  @Output() routeChange = new EventEmitter<string>();
-  
-  activeRoute = 'dashboard';
-
-  setActive(route: string) {
-    this.activeRoute = route;
-    this.routeChange.emit(route);
-  }
 }

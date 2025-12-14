@@ -28,19 +28,27 @@
         </button>
         
         <div class="user-dropdown" [class.show]="showUserMenu">
-          <div class="dropdown-item">
+          <a class="dropdown-item" [routerLink]="['/profile']" (click)="closeUserMenu()">
             <i class="fas fa-user"></i>
             <span>Perfil</span>
-          </div>
-          <div class="dropdown-item">
+          </a>
+          <a class="dropdown-item" [routerLink]="['/settings']" (click)="closeUserMenu()">
             <i class="fas fa-cog"></i>
             <span>Configurações</span>
-          </div>
+          </a>
+          <a class="dropdown-item" [routerLink]="['/documents']" (click)="closeUserMenu()">
+            <i class="fas fa-file-alt"></i>
+            <span>Documentos</span>
+          </a>
+          <a class="dropdown-item" [routerLink]="['/google-drive']" (click)="closeUserMenu()">
+            <i class="fab fa-google-drive"></i>
+            <span>Google Drive</span>
+          </a>
           <div class="dropdown-divider"></div>
-          <div class="dropdown-item logout" (click)="logout()">
+          <button class="dropdown-item logout" type="button" (click)="logout()">
             <i class="fas fa-sign-out-alt"></i>
             <span>Sair</span>
-          </div>
+          </button>
         </div>
       </div>
     </div>
