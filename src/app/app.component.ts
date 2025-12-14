@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AlertComponent } from './components/shared/alert/alert';
@@ -30,11 +30,12 @@ import { AlertService, AlertConfig } from './services/alert.service';
 export class AppComponent implements OnInit {
   alertConfig: AlertConfig | null = null;
 
-  constructor(private alertService: AlertService) {}
+  constructor(private alertService: AlertService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.alertService.alert$.subscribe((config) => {
       this.alertConfig = config;
+      this.cdr.detectChanges();
     });
   }
 

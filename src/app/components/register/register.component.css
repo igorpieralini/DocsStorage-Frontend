@@ -147,6 +147,8 @@ border-radius:50%; animation:float 20s infinite linear; backdrop-filter: blur(10
     background: transparent; 
     font-size: 1rem; 
     outline: none; 
+    z-index: 2;
+    position: relative;
 }
 
 .form-label { 
@@ -155,14 +157,23 @@ border-radius:50%; animation:float 20s infinite linear; backdrop-filter: blur(10
     transform: translateY(-50%); 
     color: #6b7280; 
     font-size: 1rem; 
-    transition: all 0.25s ease; 
-    pointer-events: none; 
+    transition: all 0.25s cubic-bezier(.4,0,.2,1);
+    pointer-events: none;
+    background: transparent;
+    z-index: 1;
+    padding: 0 4px;
 }
 
 .input-wrapper.focused .form-label,
 .input-wrapper.filled .form-label { 
-    transform: translateY(-20px) scale(0.86); 
-    color: #007bff; 
+    top: 0.2rem;
+    left: 40px;
+    font-size: 0.85rem;
+    background: #fff;
+    color: #007bff;
+    transform: translateY(-50%) scale(0.92);
+    padding: 0 4px;
+    z-index: 2;
 }
 
 .input-border { 

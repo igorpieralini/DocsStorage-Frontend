@@ -227,6 +227,7 @@
   border-radius: 12px;
   transition: all 0.3s ease;
   border: 2px solid transparent;
+  overflow: visible;
 }
 
 .input-wrapper.focused {
@@ -266,17 +267,25 @@
   left: 48px;
   top: 50%;
   transform: translateY(-50%);
-  color: #666;
+  color: #6b7280;
   font-size: 1rem;
-  transition: all 0.3s ease;
+  transition: all 0.25s cubic-bezier(.4,0,.2,1);
   pointer-events: none;
+  background: transparent;
   z-index: 1;
+  padding: 0 4px;
 }
 
 .input-wrapper.focused .form-label,
 .input-wrapper.filled .form-label {
-  transform: translateY(-22px) scale(0.85);
+  top: 0.2rem;
+  left: 44px;
+  font-size: 0.85rem;
+  background: #fff;
   color: #007bff;
+  transform: translateY(-50%) scale(0.92);
+  padding: 0 4px;
+  z-index: 2;
 }
 
 .password-toggle {

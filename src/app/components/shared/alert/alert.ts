@@ -33,13 +33,18 @@ export class AlertComponent implements OnInit, OnChanges, OnDestroy {
   private progressTimer?: any;
 
   ngOnInit() {
-    if (this.autoClose && this.visible) {
+    if (this.visible && this.autoClose) {
       this.startAutoClose();
     }
   }
 
-  ngOnChanges() {
-    if (this.visible && this.autoClose) {
+  ngOnChanges(changes: any) {
+    if (changes.visible && changes.visible.currentValue) {
+      this.clearTimers();
+      if (this.autoClose) {
+        this.startAutoClose();
+      }
+    } else if (this.visible && this.autoClose) {
       this.startAutoClose();
     } else {
       this.clearTimers();

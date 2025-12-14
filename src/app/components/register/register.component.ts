@@ -13,12 +13,16 @@ import { AlertService } from '../../services/alert.service';
   imports: [FormsModule, CommonModule, RouterModule]
 })
 export class RegisterComponent {
+  togglePassword() {
+    this.showPassword = !this.showPassword;
+  }
+
   username: string = '';
   email: string = '';
   password: string = '';
   confirmPassword: string = '';
   isLoading: boolean = false;
-  // focus states to replicate login input behavior
+
   usernameFocused: boolean = false;
   emailFocused: boolean = false;
   passwordFocused: boolean = false;
@@ -32,6 +36,8 @@ export class RegisterComponent {
   ) {}
 
   onRegister() {
+    if (this.isLoading) return;
+
     if (!this.username.trim()) {
       this.alertService.error('Nome de usuário é obrigatório', 'Campo obrigatório');
       return;
@@ -51,30 +57,25 @@ export class RegisterComponent {
       this.alertService.error('As senhas não coincidem', 'Validação');
       return;
     }
-
+    
     this.isLoading = true;
-
     this.authService.register(this.username, this.email, this.password).subscribe({
+
       next: (res) => {
         this.isLoading = false;
         if (res.success) {
           this.alertService.success('Conta criada com sucesso!', 'Cadastro');
           setTimeout(() => this.router.navigate(['/login']), 1500);
         } else {
-          this.alertService.error(res.message || 'Erro ao criar conta', 'Falha');
+          this.alertService.error(res.message || 'Erro ao cadastrar', 'Erro');
         }
       },
+
       error: (err) => {
         this.isLoading = false;
-        console.error('Erro no cadastro:', err);
-        let msg = 'Erro inesperado. Tente novamente.';
-        if (err.status === 400 || err.status === 409) msg = err.error?.message || msg;
+        let msg = err.error?.message || 'Erro inesperado ao cadastrar';
         this.alertService.error(msg, 'Erro');
       }
     });
-  }
-
-  togglePassword() {
-    this.showPassword = !this.showPassword;
   }
 }

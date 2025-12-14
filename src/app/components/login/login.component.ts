@@ -34,12 +34,10 @@ export class LoginComponent implements OnDestroy {
     private alertService: AlertService,
     private googleAuth: GoogleAuthSimpleService
   ) {
-    // Escuta mensagens do popup de autenticação
     window.addEventListener('message', this.handleAuthMessage.bind(this));
   }
 
   ngOnDestroy() {
-    // Remove o listener quando o componente for destruído
     window.removeEventListener('message', this.handleAuthMessage.bind(this));
   }
 
@@ -66,6 +64,8 @@ export class LoginComponent implements OnDestroy {
   }
 
   onLogin() {
+
+    if (this.isLoading) return;
     this.isLoading = true;
 
     if (!this.email.trim()) {
@@ -79,8 +79,6 @@ export class LoginComponent implements OnDestroy {
       this.isLoading = false;
       return;
     }
-
-    console.log('🚀 Iniciando login...');
     
     this.authService.login(this.email, this.password).subscribe({
       next: (res) => {
@@ -88,23 +86,18 @@ export class LoginComponent implements OnDestroy {
         
         if (res.success) {
           this.alertService.success('Login realizado com sucesso!', 'Bem-vindo!');
-          console.log('Usuário:', res.user);
           this.authService.saveToken(res.token || '');
           
           setTimeout(() => {
             this.router.navigate(['/dashboard']);
           }, 2000);
         } else {
-          console.log('❌ Login falhou:', res.message);
           this.alertService.error(res.message || 'Erro ao fazer login', 'Falha na autenticação');
         }
       },
 
       error: (err) => {
         this.isLoading = false;
-        console.error('❌ Erro completo:', err);
-        console.error('📊 Status:', err.status);
-        console.error('💬 Mensagem:', err.error);
         
         let errorMessage = 'Erro inesperado. Tente novamente.';
         let title = 'Erro';

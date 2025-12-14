@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Observable, timeout, catchError, throwError } from 'rxjs';
+import { Observable, timeout, catchError, throwError, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -16,29 +16,25 @@ export class AuthService {
     console.log('🔗 Fazendo requisição para:', this.loginUrl);
     console.log('📤 Dados enviados:', { email, password: '***' });
     
-    const request = this.http.post(this.loginUrl, { email, password });
-    
-    // Log da resposta para debug
-    request.subscribe({
-      next: (response) => console.log('📥 Resposta recebida:', response),
-      error: (error) => console.error('❌ Erro na requisição:', error)
-    });
-    
-    return request;
+    return this.http.post(this.loginUrl, { email, password }).pipe(
+      tap({
+        next: (response) => console.log('📥 Resposta recebida:', response),
+        error: (error) => console.error('❌ Erro na requisição:', error)
+      })
+    );
   }
 
-  register(name: string, email: string, password: string): Observable<any> {
+  register(username: string, email: string, password: string): Observable<any> {
     const registerUrl = `${this.baseUrl}/auth/register`;
     console.log('🔗 Fazendo requisição para:', registerUrl);
-    console.log('📤 Dados enviados:', { name, email, password: '***' });
-    const req = this.http.post(registerUrl, { name, email, password });
-
-    req.subscribe({
-      next: (response) => console.log('📥 Resposta (register):', response),
-      error: (error) => console.error('❌ Erro na requisição (register):', error)
-    });
-
-    return req;
+    console.log('📤 Dados enviados:', { username, email, password: '***' });
+    
+    return this.http.post(registerUrl, { username, email, password }).pipe(
+      tap({
+        next: (response) => console.log('📥 Resposta (register):', response),
+        error: (error) => console.error('❌ Erro na requisição (register):', error)
+      })
+    );
   }
 
   saveToken(token: string) {

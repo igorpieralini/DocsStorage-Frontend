@@ -32,7 +32,11 @@ export class AlertService {
       closeOnOverlay: true,
       ...config
     };
-    this.alertSubject.next(alertConfig);
+    // Força o reset do alerta para garantir exibição imediata
+    this.alertSubject.next(null);
+    setTimeout(() => {
+      this.alertSubject.next(alertConfig);
+    }, 10);
   }
 
   success(message: string, title?: string, autoClose: boolean = true) {
