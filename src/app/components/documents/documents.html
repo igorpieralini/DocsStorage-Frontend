@@ -6,11 +6,52 @@
       <p class="subtitle">Visualize, navegue e gerencie seus arquivos pessoais.</p>
     </div>
     <div class="actions">
-      <label class="btn secondary">
-        <input type="file" (change)="onFileSelected($event)" [disabled]="uploading" />
-        {{ uploading ? 'Enviando...' : 'Upload' }}
-      </label>
-      <button class="btn" (click)="refresh()" [disabled]="loading">Atualizar</button>
+      <button class="btn secondary" (click)="createFile()">Novo arquivo</button>
+      <button class="btn secondary" (click)="createFolder()">Nova pasta</button>
+      <button class="btn secondary" (click)="onUploadToggle()">{{ uploading ? 'Enviando...' : 'Upload' }}</button>
+    </div>
+  </div>
+
+    <!-- Create modal (similar style to upload) -->
+    <div class="create-modal-overlay" *ngIf="createModalVisible">
+      <div class="create-modal">
+        <h3>{{ createType === 'file' ? 'Criar arquivo' : 'Criar pasta' }}</h3>
+        <div class="form-row">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="createName" placeholder="Digite o nome" />
+        </div>
+        <div class="form-row">
+          <label>Destino</label>
+          <select [(ngModel)]="createTarget">
+            <option *ngFor="let opt of folderOptions" [value]="opt.value">{{ opt.label || 'Raiz' }}</option>
+          </select>
+        </div>
+        <div class="upload-actions">
+          <button class="btn secondary" (click)="closeCreateModal()">Cancelar</button>
+          <button class="btn" (click)="submitCreate()">Criar</button>
+        </div>
+      </div>
+    </div>
+
+  <!-- Upload box (modal-like inline) -->
+  <div class="upload-box-overlay" *ngIf="uploadBoxVisible" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+    <div class="upload-box">
+      <div class="upload-dropzone" (dragover)="$event.preventDefault()" (drop)="$event.preventDefault()">
+        <div class="upload-icon" aria-hidden="true">
+          <!-- simple upload SVG icon -->
+          <svg width="88" height="88" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="1" y="12" width="22" height="10" rx="2" fill="#EEF2F7" stroke="#CBD5E1" />
+            <path d="M12 3v11" stroke="#0f766e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 8l5-5 5 5" stroke="#0f766e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3>Arraste ou solte o arquivo aqui</h3>
+        <p class="muted">ou <button class="text" (click)="browseFiles(fileInput)">procurar no computador</button></p>
+        <input #fileInput type="file" (change)="onFileSelected($event)" style="display:none" />
+      </div>
+      <div class="upload-actions">
+        <button class="btn secondary" (click)="uploadBoxVisible = false">Cancelar</button>
+      </div>
     </div>
   </div>
 
@@ -41,20 +82,15 @@
       </div>
     </div>
 
-    <div class="state" *ngIf="error">
-      <p class="error">{{ error }}</p>
-    </div>
-
     <div class="state" *ngIf="loading">
       <div class="spinner"></div>
       <p>Carregando...</p>
     </div>
-
-    <div class="state" *ngIf="!loading && !error && items.length === 0">
+    <div class="state" *ngIf="!loading && items.length === 0">
       <p>Nenhum arquivo aqui ainda.</p>
     </div>
 
-    <div class="table" *ngIf="!loading && !error && items.length > 0">
+    <div class="table" *ngIf="!loading && items.length > 0">
       <div class="row head">
         <div>Nome</div>
         <div>Tipo</div>
@@ -62,7 +98,7 @@
         <div>Modificado</div>
         <div class="actions-col">Ações</div>
       </div>
-      <div class="row" *ngFor="let item of items">
+      <div class="row" *ngFor="let item of items" (contextmenu)="onContextMenu($event, item)">
         <div class="name" (click)="enterDir(item)">
           <span class="icon" [class.dir]="item.type === 'dir'" [class.file]="item.type === 'file'"></span>
           <span class="label">{{ item.name }}</span>
@@ -71,9 +107,26 @@
         <div>{{ item.type === 'dir' ? '—' : formatBytes(item.size) }}</div>
         <div>{{ item.modified_at | date:'short' }}</div>
         <div class="actions-col">
-          <button class="text" [disabled]="item.type === 'dir'" (click)="download(item)">Baixar</button>
+          <button class="icon-btn" [disabled]="item.type === 'dir'" (click)="download(item)" aria-label="Baixar">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3v12" stroke="#0f766e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M8 11l4 4 4-4" stroke="#0f766e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 21h14" stroke="#0f766e" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
   </div>
+</div>
+
+<!-- Context menu -->
+<div class="context-menu" *ngIf="contextMenuVisible" [style.left.px]="contextMenuX" [style.top.px]="contextMenuY">
+  <ul>
+    <li (click)="downloadContext()">Baixar</li>
+    <li (click)="deleteContext()">Excluir</li>
+    <li (click)="moveContext()">Mover</li>
+    <li (click)="cutContext()">Recortar</li>
+    <li (click)="copyContext()">Copiar</li>
+  </ul>
 </div>

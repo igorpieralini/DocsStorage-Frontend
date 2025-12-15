@@ -176,7 +176,7 @@
 .progress-bar {
   height: 100%;
   background: linear-gradient(90deg, #007bff, #0056b3);
-  transition: width 50ms linear;
+  transition: width 150ms linear;
 }
 
 .alert-success .progress-bar {

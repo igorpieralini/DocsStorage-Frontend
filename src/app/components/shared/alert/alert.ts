@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface AlertAction {
@@ -9,9 +9,10 @@ export interface AlertAction {
 
 @Component({
   selector: 'app-alert',
+  standalone: true,
   imports: [CommonModule],
   templateUrl: './alert.html',
-  styleUrl: './alert.css'
+  styleUrls: ['./alert.css']
 })
 export class AlertComponent implements OnInit, OnChanges, OnDestroy {
   @Input() visible = false;
@@ -31,6 +32,8 @@ export class AlertComponent implements OnInit, OnChanges, OnDestroy {
   progress = 100;
   private autoCloseTimer?: any;
   private progressTimer?: any;
+
+  constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     if (this.visible && this.autoClose) {
@@ -60,6 +63,8 @@ export class AlertComponent implements OnInit, OnChanges, OnDestroy {
         if (this.progress <= 0) {
           this.progress = 0;
         }
+        // Ensure Angular picks up the changes from this timer
+        try { this.cdr.detectChanges(); } catch (e) { /* noop */ }
       }, 50);
     }
     

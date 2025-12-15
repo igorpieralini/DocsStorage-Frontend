@@ -54,4 +54,20 @@ export class FilesService {
   download(filename: string): Observable<Blob> {
     return this.http.get(`${this.baseUrl}/download/${encodeURIComponent(filename)}`, { responseType: 'blob' });
   }
+
+  createFolder(name: string, path: string = ''): Observable<any> {
+    return this.http.post(`${this.baseUrl}/mkdir`, { name, path });
+  }
+
+  createFile(name: string, path: string = ''): Observable<any> {
+    return this.http.post(`${this.baseUrl}/create`, { name, path });
+  }
+
+  delete(filename: string): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/delete/${encodeURIComponent(filename)}`);
+  }
+
+  move(filename: string, targetPath: string = ''): Observable<any> {
+    return this.http.post(`${this.baseUrl}/move`, { filename, target_path: targetPath });
+  }
 }

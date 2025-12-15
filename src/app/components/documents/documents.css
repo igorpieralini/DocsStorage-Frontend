@@ -193,6 +193,37 @@ h1 {
 	cursor: pointer;
 }
 
+.icon-btn {
+	background: transparent;
+	border: none;
+	cursor: pointer;
+	padding: 6px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: #0f766e;
+}
+.icon-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* Context menu */
+.context-menu {
+	position: fixed;
+	z-index: 10010;
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgba(15,23,42,0.12);
+	min-width: 160px;
+}
+.context-menu ul { list-style: none; margin: 0; padding: 8px 0; }
+.context-menu li {
+	padding: 8px 14px;
+	cursor: pointer;
+	color: #0f172a;
+	font-weight: 600;
+}
+.context-menu li:hover { background: #f8fafc; }
+
 .state {
 	padding: 18px 16px;
 	text-align: center;
@@ -224,3 +255,68 @@ h1 {
 	.row { grid-template-columns: 1.5fr 80px 80px 120px; }
 	.actions-col { display: none; }
 }
+
+/* Upload box styles */
+.upload-box-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(15,23,42,0.45);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 8000;
+}
+.upload-box {
+	background: #fff;
+	border-radius: 12px;
+	padding: 28px;
+	width: 720px;
+	max-width: calc(100% - 48px);
+	text-align: center;
+	border: 1px solid #e5e7eb;
+}
+.upload-box h3 { margin: 10px 0 6px; font-size: 20px; }
+.upload-box p { margin: 0 0 16px; color: #6b7280; }
+.upload-box .upload-actions { display: flex; justify-content: center; gap: 10px; margin-top: 12px; }
+.upload-box .text { background: none; border: none; color: #0f766e; cursor: pointer; font-weight: 600; }
+
+.upload-dropzone {
+	border: 2px dashed #e6f2ef;
+	background: linear-gradient(180deg, #ffffff 0%, #f8fdfb 100%);
+	border-radius: 12px;
+	padding: 28px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	min-height: 220px;
+}
+.upload-icon svg { display: block; }
+.upload-icon { width: 88px; height: 88px; }
+.muted { color: #6b7280; }
+
+/* Create modal styles (reuse upload modal look) */
+.create-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(15,23,42,0.45);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 8000;
+}
+.create-modal {
+	background: #fff;
+	border-radius: 12px;
+	padding: 24px;
+	width: 560px;
+	max-width: calc(100% - 48px);
+	text-align: left;
+	border: 1px solid #e5e7eb;
+}
+.create-modal h3 { margin: 0 0 12px; }
+.create-modal .form-row { display:flex; flex-direction: column; gap:6px; margin-bottom:12px; }
+.create-modal label { font-weight:600; color:#0f172a; }
+.create-modal input[type="text"], .create-modal select { padding:10px; border-radius:8px; border:1px solid #e5e7eb; }
+.create-modal .upload-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:8px; }

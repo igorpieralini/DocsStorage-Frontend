@@ -51,7 +51,7 @@
       <div class="card">
         <div class="card-header">
           <h3>Arquivos Recentes</h3>
-          <a href="#" class="view-all">Ver todos</a>
+          <a class="view-all" (click)="goToDocuments($event)">Ver todos</a>
         </div>
         <div class="card-body">
           <div class="file-list">
@@ -80,15 +80,16 @@
         </div>
         <div class="card-body">
           <div class="action-buttons">
-            <button class="action-btn primary">
-              <i class="fas fa-plus"></i>
-              <span>Novo Upload</span>
-            </button>
-            <button class="action-btn secondary">
-              <i class="fas fa-folder-plus"></i>
-              <span>Criar Pasta</span>
-            </button>
-            <button class="action-btn secondary">
+                <input #fileInputDashboard type="file" style="display:none" (change)="onFileSelected($event)" />
+                <button class="action-btn primary" (click)="triggerUpload(fileInputDashboard)">
+                  <i class="fas fa-plus"></i>
+                  <span>{{ uploading ? 'Enviando...' : 'Novo Upload' }}</span>
+                </button>
+                <button class="action-btn secondary" (click)="openCreateModal()">
+                  <i class="fas fa-folder-plus"></i>
+                  <span>Criar Pasta</span>
+                </button>
+            <button class="action-btn secondary" (click)="loadDashboardData()">
               <i class="fab fa-google-drive"></i>
               <span>Sincronizar</span>
             </button>
@@ -98,3 +99,24 @@
     </div>
   </div>
 </div>
+
+    <!-- Create modal -->
+    <div class="create-modal-overlay" *ngIf="createModalVisible">
+      <div class="create-modal">
+        <h3>Criar pasta</h3>
+        <div class="form-row">
+          <label>Nome</label>
+          <input type="text" [(ngModel)]="createName" placeholder="Digite o nome da pasta" />
+        </div>
+        <div class="form-row">
+          <label>Destino</label>
+          <select [(ngModel)]="createTarget">
+            <option *ngFor="let opt of folderOptions" [value]="opt.value">{{ opt.label || 'Raiz' }}</option>
+          </select>
+        </div>
+        <div class="upload-actions">
+          <button class="btn secondary" (click)="closeCreateModal()">Cancelar</button>
+          <button class="btn" (click)="submitCreate()">Criar</button>
+        </div>
+      </div>
+    </div>
