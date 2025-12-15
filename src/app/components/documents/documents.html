@@ -1,4 +1,79 @@
 <div class="page">
-  <h1>{{ title }}</h1>
-  <p>Visualize e gerencie seus arquivos.</p>
+  <div class="page-header">
+    <div>
+      <p class="eyebrow">Armazenamento</p>
+      <h1>Documentos</h1>
+      <p class="subtitle">Visualize, navegue e gerencie seus arquivos pessoais.</p>
+    </div>
+    <div class="actions">
+      <label class="btn secondary">
+        <input type="file" (change)="onFileSelected($event)" [disabled]="uploading" />
+        {{ uploading ? 'Enviando...' : 'Upload' }}
+      </label>
+      <button class="btn" (click)="refresh()" [disabled]="loading">Atualizar</button>
+    </div>
+  </div>
+
+  <div class="storage" *ngIf="storageInfo as info">
+    <div class="storage-row">
+      <div>
+        <p class="storage-title">Seu espaço</p>
+        <p class="storage-value">{{ info.user_storage.used_gb | number:'1.1-2' }} GB de {{ info.user_storage.max_gb | number:'1.1-2' }} GB</p>
+      </div>
+      <p class="storage-meta">{{ info.user_storage.files_count }} arquivos</p>
+    </div>
+    <div class="progress">
+      <span class="bar" [style.width.%]="info.user_storage.percentage"></span>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <div class="breadcrumbs">
+        <span class="crumb" (click)="goToRoot()">Raiz</span>
+        <ng-container *ngFor="let crumb of breadcrumbs; let i = index">
+          <span class="sep">/</span>
+          <span class="crumb" (click)="goToBreadcrumb(i)">{{ crumb }}</span>
+        </ng-container>
+      </div>
+      <div class="panel-actions">
+        <button class="text" (click)="goToRoot()" [disabled]="!breadcrumbs.length">Voltar ao início</button>
+      </div>
+    </div>
+
+    <div class="state" *ngIf="error">
+      <p class="error">{{ error }}</p>
+    </div>
+
+    <div class="state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Carregando...</p>
+    </div>
+
+    <div class="state" *ngIf="!loading && !error && items.length === 0">
+      <p>Nenhum arquivo aqui ainda.</p>
+    </div>
+
+    <div class="table" *ngIf="!loading && !error && items.length > 0">
+      <div class="row head">
+        <div>Nome</div>
+        <div>Tipo</div>
+        <div>Tamanho</div>
+        <div>Modificado</div>
+        <div class="actions-col">Ações</div>
+      </div>
+      <div class="row" *ngFor="let item of items">
+        <div class="name" (click)="enterDir(item)">
+          <span class="icon" [class.dir]="item.type === 'dir'" [class.file]="item.type === 'file'"></span>
+          <span class="label">{{ item.name }}</span>
+        </div>
+        <div>{{ item.type === 'dir' ? 'Pasta' : 'Arquivo' }}</div>
+        <div>{{ item.type === 'dir' ? '—' : formatBytes(item.size) }}</div>
+        <div>{{ item.modified_at | date:'short' }}</div>
+        <div class="actions-col">
+          <button class="text" [disabled]="item.type === 'dir'" (click)="download(item)">Baixar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
