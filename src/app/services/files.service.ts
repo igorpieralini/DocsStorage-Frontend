@@ -55,6 +55,12 @@ export class FilesService {
     return this.http.get(`${this.baseUrl}/download/${encodeURIComponent(filename)}`, { responseType: 'blob' });
   }
 
+  downloadByPath(path: string, name: string): Observable<Blob> {
+    const params = { path, name } as Record<string, string>;
+    // Angular's HttpClient typing for responseType can be strict; cast to satisfy TS
+    return this.http.get(`${this.baseUrl}/download-by-path`, { params, responseType: 'blob' as 'json' }) as unknown as Observable<Blob>;
+  }
+
   createFolder(name: string, path: string = ''): Observable<any> {
     return this.http.post(`${this.baseUrl}/mkdir`, { name, path });
   }

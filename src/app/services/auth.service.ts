@@ -75,6 +75,19 @@ export class AuthService {
     }
   }
 
+  updateProfile(name: string, username: string, photoChanged = false): Observable<any> {
+    const url = `${this.baseUrl}/auth/profile`;
+    return this.http.put(url, { name, username, photo_changed: photoChanged }).pipe(
+      tap((resp: any) => {
+        const user = resp?.user;
+        if (user) {
+          const remember = !!localStorage.getItem('token_data');
+          this.setUser(user, remember);
+        }
+      })
+    );
+  }
+
   getToken(): string | null {
     // Prioriza token persistente (remember me) se válido
     const dataStr = localStorage.getItem('token_data');

@@ -148,7 +148,9 @@ export class DocumentsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (data) => {
           console.log('✅ Arquivos carregados:', data);
-          this.items = data.items;
+          // oculta pastas de fotos de perfil (photo_*)
+          const filtered = (data.items || []).filter(i => !(i.type === 'dir' && i.name.startsWith('photo_')));
+          this.items = filtered as any;
           this.currentPath = data.path || '';
           this.updateBreadcrumbs();
           this.cdr.detectChanges();

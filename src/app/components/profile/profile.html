@@ -1,4 +1,42 @@
-<div class="page">
-  <h1>{{ title }}</h1>
-  <p>Gerencie suas informações de usuário.</p>
+<div class="page profile-page">
+  <div class="page-head">
+    <div>
+      <h1>{{ title }}</h1>
+      <p>Atualize sua identidade, foto e como você aparece para os outros.</p>
+    </div>
+  </div>
+
+  <div class="profile-card">
+    <div class="photo-section">
+      <div class="avatar-ring">
+        <div class="photo" [class.placeholder]="!photoPreviewUrl">
+          <img *ngIf="photoPreviewUrl" [src]="photoPreviewUrl" alt="Foto de perfil">
+          <span *ngIf="!photoPreviewUrl">Sem foto</span>
+        </div>
+      </div>
+      <p class="hint">PNG ou JPG · até 5 MB</p>
+      <div class="actions">
+        <input type="file" accept="image/*" #photoPicker (change)="onPhotoSelected($event)" hidden>
+        <button class="btn primary" [disabled]="uploading" (click)="photoPicker.click()">
+          {{ uploading ? 'Enviando...' : 'Trocar foto' }}
+        </button>
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="field">
+        <label>Nome</label>
+        <input type="text" [(ngModel)]="name" placeholder="Seu nome">
+      </div>
+
+      <div class="field">
+        <label>Username</label>
+        <input type="text" [(ngModel)]="username" placeholder="Seu username">
+      </div>
+
+      <div class="info-actions">
+        <button class="btn primary" (click)="saveProfile()">Salvar alterações</button>
+      </div>
+    </div>
+  </div>
 </div>

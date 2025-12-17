@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 })
 export class DashboardComponent implements OnInit {
   totalDocuments = 0;
-  uploadsToday = 0;
+  uploadsWeek = 0;
   storageUsed = '0 MB';
   syncedFiles = 0;
 
@@ -35,6 +35,19 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    // Rehidrata dados da dashboard rapidamente (cache local)
+    try {
+      const cacheStr = localStorage.getItem('dashboard_cache');
+      if (cacheStr) {
+        const cache = JSON.parse(cacheStr);
+        this.totalDocuments = cache.totalDocuments ?? this.totalDocuments;
+        this.uploadsWeek = cache.uploadsWeek ?? this.uploadsWeek;
+        this.storageUsed = cache.storageUsed ?? this.storageUsed;
+        this.syncedFiles = cache.syncedFiles ?? this.syncedFiles;
+        this.recentFiles = cache.recentFiles ?? this.recentFiles;
+      }
+    } catch {}
+    // Em seguida busca dados atualizados da API
     this.loadDashboardData();
   }
 
@@ -44,6 +57,7 @@ export class DashboardComponent implements OnInit {
       next: (info) => {
         this.storageUsed = `${info.user_storage.used_gb} GB`;
         this.totalDocuments = info.user_storage.files_count || 0;
+        this.persistCache();
       },
       error: () => {}
     });
@@ -62,10 +76,12 @@ export class DashboardComponent implements OnInit {
         } as any));
         this.recentFiles = mapped as any;
 
-        // compute uploadsToday from recent files (client-side approximation)
-        const today = new Date();
-        const isSameDay = (d: Date) => d.getFullYear() === today.getFullYear() && d.getMonth() === today.getMonth() && d.getDate() === today.getDate();
-        this.uploadsToday = (files || []).filter((f: any) => isSameDay(new Date(f.modified_at))).length;
+        // compute uploads in the last 7 days (client-side approximation)
+        const now = Date.now();
+        const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+        const isWithinLast7Days = (d: Date) => (now - d.getTime()) <= sevenDaysMs;
+        this.uploadsWeek = (files || []).filter((f: any) => isWithinLast7Days(new Date(f.modified_at))).length;
+        this.persistCache();
       },
       error: () => {}
     });
@@ -138,5 +154,18 @@ export class DashboardComponent implements OnInit {
     const exponent = Math.min(Math.floor(Math.log(bytes)/Math.log(1024)), units.length-1);
     const value = bytes / Math.pow(1024, exponent);
     return `${value.toFixed(value >= 10 || exponent === 0 ? 0 : 1)} ${units[exponent]}`;
+  }
+
+  private persistCache() {
+    try {
+      const payload = {
+        totalDocuments: this.totalDocuments,
+        uploadsWeek: this.uploadsWeek,
+        storageUsed: this.storageUsed,
+        syncedFiles: this.syncedFiles,
+        recentFiles: this.recentFiles
+      };
+      localStorage.setItem('dashboard_cache', JSON.stringify(payload));
+    } catch {}
   }
 }
