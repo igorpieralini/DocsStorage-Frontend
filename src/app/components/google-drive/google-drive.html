@@ -1,4 +1,80 @@
 <div class="page">
-  <h1>{{ title }}</h1>
-  <p>Conecte e sincronize com o Google Drive.</p>
+  <div class="header">
+    <h1>{{ title }}</h1>
+    <button class="btn btn-primary" (click)="refresh()" [disabled]="loading">
+      <span *ngIf="!loading">🔄 Atualizar</span>
+      <span *ngIf="loading">⏳ Carregando...</span>
+    </button>
+  </div>
+
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs" *ngIf="breadcrumbs.length > 0">
+    <span *ngFor="let crumb of breadcrumbs; let i = index">
+      <a 
+        (click)="navigateToBreadcrumb(i)" 
+        [class.active]="i === breadcrumbs.length - 1"
+        style="cursor: pointer;">
+        {{ crumb.name }}
+      </a>
+      <span *ngIf="i < breadcrumbs.length - 1"> / </span>
+    </span>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading">
+    <p>⏳ Carregando arquivos do Google Drive...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-message">
+    <p>❌ {{ error }}</p>
+  </div>
+
+  <!-- Files List -->
+  <div *ngIf="!loading && !error" class="files-container">
+    <div *ngIf="files.length === 0" class="empty-state">
+      <div class="empty-icon">📂</div>
+      <h3>Pasta vazia</h3>
+      <p>Nenhum arquivo encontrado nesta pasta do Google Drive.</p>
+    </div>
+
+    <table *ngIf="files.length > 0" class="files-table">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Tipo</th>
+          <th>Tamanho</th>
+          <th>Modificado</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let file of files" (click)="openFile(file)" style="cursor: pointer;">
+          <td>
+            <span class="file-icon">{{ file.type === 'folder' ? '📁' : '📄' }}</span>
+            {{ file.name }}
+          </td>
+          <td>
+            <span class="file-type">{{ file.type === 'folder' ? 'Pasta' : 'Arquivo' }}</span>
+          </td>
+          <td>{{ formatFileSize(file.size) }}</td>
+          <td>{{ formatDate(file.modified_at) }}</td>
+          <td>
+            <button 
+              *ngIf="file.web_view_link && file.type !== 'folder'" 
+              class="btn-small"
+              (click)="$event.stopPropagation(); openFile(file)">
+              🔗 Abrir
+            </button>
+            <button 
+              *ngIf="file.type === 'folder'" 
+              class="btn-small"
+              (click)="$event.stopPropagation(); openFolder(file)">
+              📂 Abrir
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

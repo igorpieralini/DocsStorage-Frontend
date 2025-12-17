@@ -50,9 +50,9 @@ export class GoogleAuthSimpleService {
       client_id: OAuthConfig.google.clientId,
       redirect_uri: OAuthConfig.google.redirectUri,
       response_type: 'code',
-      scope: 'email profile',
-      access_type: 'online',
-      prompt: 'select_account'
+      scope: 'email profile https://www.googleapis.com/auth/drive.readonly',
+      access_type: 'offline',
+      prompt: 'consent'
     });
 
     const url = `${authUrl}?${params.toString()}`;
