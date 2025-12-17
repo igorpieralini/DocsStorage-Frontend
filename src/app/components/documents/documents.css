@@ -119,15 +119,24 @@ h1 {
 	align-items: center;
 	gap: 6px;
 	font-size: 14px;
+	color: #6b7280;
 }
 
 .crumb {
-	color: #0f766e;
+	color: #6b7280;
 	cursor: pointer;
-	font-weight: 600;
+	font-weight: 500;
+	transition: color 0.15s ease;
 }
 
-.sep { color: #9ca3af; }
+.crumb:hover {
+	color: #0f766e;
+}
+
+.sep { 
+	color: #9ca3af;
+	font-weight: 400;
+}
 
 .panel-actions .text {
 	color: #0f172a;
@@ -168,15 +177,19 @@ h1 {
 }
 
 .icon {
-	width: 26px;
-	height: 26px;
-	border-radius: 6px;
-	background: #e2e8f0;
+	width: 20px;
+	height: 20px;
 	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
 }
 
-.icon.dir { background: #d9f99d; }
-.icon.file { background: #bae6fd; }
+.icon svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
 
 .label { font-weight: 600; color: #0f172a; }
 

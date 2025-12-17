@@ -34,6 +34,14 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/documents']);
   }
 
+  goToGoogleDrive() {
+    this.router.navigate(['/google-drive']);
+  }
+
+  goToCreateFolder() {
+    this.router.navigate(['/documents']);
+  }
+
   ngOnInit() {
     // Rehidrata dados da dashboard rapidamente (cache local)
     try {

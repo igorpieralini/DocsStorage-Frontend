@@ -30,7 +30,9 @@ export class ProfileComponent implements OnInit {
     if (this.user) {
       this.name = this.user.name || '';
       this.username = this.user.username || '';
-      // tenta localizar foto existente
+      // Tenta carregar do cache primeiro
+      this.loadPhotoFromCache();
+      // Prioriza foto local na pasta photo_{id}; fallback para profile_picture do Google
       const folder = this.getPhotoFolder();
       this.files.listEntries(folder).subscribe({
         next: (data) => {
@@ -40,9 +42,13 @@ export class ProfileComponent implements OnInit {
             photos.sort((a, b) => new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime());
             this.photoFileName = photos[0].name;
             this.loadPreview();
+          } else {
+            this.loadGooglePhotoFallback();
           }
         },
-        error: () => {}
+        error: () => {
+          this.loadGooglePhotoFallback();
+        }
       });
     }
   }
@@ -125,8 +131,40 @@ export class ProfileComponent implements OnInit {
       next: (blob) => {
         const url = URL.createObjectURL(blob);
         this.photoPreviewUrl = url;
+        this.cachePhotoUrl(url);
       },
       error: () => { this.photoPreviewUrl = null; }
     });
+  }
+
+  private loadGooglePhotoFallback() {
+    const googlePhoto = this.user?.profile_picture || this.user?.picture;
+    if (googlePhoto) {
+      this.photoPreviewUrl = googlePhoto;
+      this.cachePhotoUrl(googlePhoto);
+    } else {
+      this.photoPreviewUrl = null;
+    }
+  }
+
+  private loadPhotoFromCache() {
+    try {
+      const userId = this.user?.id || this.user?._id || this.user?.user_id;
+      if (userId) {
+        const cached = localStorage.getItem(`user_photo_${userId}`);
+        if (cached) {
+          this.photoPreviewUrl = cached;
+        }
+      }
+    } catch {}
+  }
+
+  private cachePhotoUrl(url: string) {
+    try {
+      const userId = this.user?.id || this.user?._id || this.user?.user_id;
+      if (userId && url) {
+        localStorage.setItem(`user_photo_${userId}`, url);
+      }
+    } catch {}
   }
 }

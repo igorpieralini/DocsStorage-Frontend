@@ -169,7 +169,7 @@ export class DocumentsComponent implements OnInit, OnDestroy {
 
   updateBreadcrumbs(): void {
     this.breadcrumbs = this.currentPath
-      ? this.currentPath.split('/').filter((p) => p.trim().length > 0)
+      ? this.currentPath.replace(/\\/g, '/').split('/').filter((p) => p.trim().length > 0)
       : [];
   }
 

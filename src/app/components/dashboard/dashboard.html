@@ -85,11 +85,11 @@
                   <i class="fas fa-plus"></i>
                   <span>{{ uploading ? 'Enviando...' : 'Novo Upload' }}</span>
                 </button>
-                <button class="action-btn secondary" (click)="openCreateModal()">
+                <button class="action-btn secondary" (click)="goToCreateFolder()">
                   <i class="fas fa-folder-plus"></i>
                   <span>Criar Pasta</span>
                 </button>
-            <button class="action-btn secondary" (click)="loadDashboardData()">
+            <button class="action-btn secondary" (click)="goToGoogleDrive()">
               <i class="fab fa-google-drive"></i>
               <span>Sincronizar</span>
             </button>
