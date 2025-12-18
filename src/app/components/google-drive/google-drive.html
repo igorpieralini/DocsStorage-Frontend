@@ -1,7 +1,7 @@
 <div class="page">
   <div class="header">
     <h1>{{ title }}</h1>
-    <button class="btn btn-primary" (click)="refresh()" [disabled]="loading">
+    <button class="btn btn-primary" (click)="loadFiles()" [disabled]="loading">
       <span *ngIf="!loading">🔄 Atualizar</span>
       <span *ngIf="loading">⏳ Carregando...</span>
     </button>
@@ -20,8 +20,7 @@
     </span>
   </div>
 
-  <!-- Loading State -->
-  <div *ngIf="loading" class="loading">
+  <div *ngIf="loading && files.length === 0" class="loading">
     <p>⏳ Carregando arquivos do Google Drive...</p>
   </div>
 
@@ -30,8 +29,7 @@
     <p>❌ {{ error }}</p>
   </div>
 
-  <!-- Files List -->
-  <div *ngIf="!loading && !error" class="files-container">
+  <div *ngIf="!error" class="files-container">
     <div *ngIf="files.length === 0" class="empty-state">
       <div class="empty-icon">📂</div>
       <h3>Pasta vazia</h3>

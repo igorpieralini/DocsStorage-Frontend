@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GoogleDriveService, GoogleDriveFile } from '../../services/google-drive.service';
 import { AlertService } from '../../services/alert.service';
@@ -21,16 +21,18 @@ export class GoogleDriveComponent implements OnInit, OnDestroy {
 
   constructor(
     private driveService: GoogleDriveService,
-    private alert: AlertService
+    private alert: AlertService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
     this.loadFiles();
     
-    // Atualiza a lista a cada 30 segundos
     this.refreshIntervalId = setInterval(() => {
-      this.loadFiles();
-    }, 30000);
+      if (!this.loading) { 
+        this.loadFiles();
+      }
+    }, 60000);
   }
 
   ngOnDestroy(): void {
@@ -42,8 +44,9 @@ export class GoogleDriveComponent implements OnInit, OnDestroy {
   loadFiles(): void {
     this.loading = true;
     this.error = null;
+    this.cdr.markForCheck();
 
-    this.driveService.listFiles(this.currentFolderId).subscribe({
+    this.driveService.listFiles(this.currentFolderId, 20).subscribe({
       next: (response) => {
         console.log('✅ Resposta do Google Drive:', response);
         this.loading = false;
@@ -53,6 +56,7 @@ export class GoogleDriveComponent implements OnInit, OnDestroy {
         } else {
           this.error = 'Erro ao carregar arquivos do Google Drive';
         }
+        this.cdr.markForCheck();
       },
       error: (err) => {
         console.error('❌ Erro ao carregar arquivos:', err);
@@ -60,6 +64,7 @@ export class GoogleDriveComponent implements OnInit, OnDestroy {
         const errorMessage = err?.error?.message || 'Erro ao carregar arquivos do Google Drive. Certifique-se de que você está autenticado.';
         this.error = errorMessage;
         this.alert.error(errorMessage, 'Erro');
+        this.cdr.markForCheck();
       }
     });
   }
