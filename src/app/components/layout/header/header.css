@@ -159,6 +159,11 @@
   transition: background-color 0.2s;
   color: #495057;
   text-decoration: none;
+  width: 100%;
+  border: none;
+  background: none;
+  font-size: 14px;
+  box-sizing: border-box;
 }
 
 .dropdown-item:hover {

@@ -27,11 +27,10 @@ A modern, responsive document management interface with OAuth integration and cl
 
 ## ✨ Features
 
-- 🔐 **Multi-Auth System**: Traditional login + OAuth (Google & Microsoft)
+- 🔐 **Multi-Auth System**: Traditional login + Google OAuth
 - 📁 **Document Management**: Upload, organize, and manage files and folders
 - ☁️ **Cloud Integration**: 
   - Google Drive file browsing
-  - Microsoft OneDrive support (coming soon)
 - 🎨 **Modern UI/UX**:
   - Clean, intuitive interface
   - Responsive design (mobile-first)
@@ -171,40 +170,6 @@ src/app/
 
 ---
 
-## ⚙️ Configuration
-
-### Environment Configuration
-
-Edit `src/environments/environment.ts`:
-
-```typescript
-export const environment = {
-  production: false,
-  apiUrl: 'http://127.0.0.1:5000/api'
-};
-```
-
-### OAuth Configuration
-
-1. **Google OAuth**
-   - Visit [Google Cloud Console](https://console.cloud.google.com/)
-   - Create OAuth 2.0 credentials
-   - Enable Google Drive API
-   - Add authorized redirect URI: `http://localhost:4200/oauth/callback`
-   - Update `oauth.config.ts`
-
-2. **Microsoft OAuth**
-   - Visit [Azure Portal](https://portal.azure.com/)
-   - Register application
-   - Configure redirect URI: `http://localhost:4200/oauth/callback`
-   - Update `oauth.config.ts`
-
-### API Configuration
-
-The app expects the backend API to run on `http://127.0.0.1:5000`. Update `environment.ts` if your API runs on a different URL.
-
----
-
 ## 📁 Project Structure
 
 ```
@@ -231,7 +196,6 @@ frontend/
 ### Authentication
 - ✅ Traditional email/password login
 - ✅ Google OAuth 2.0
-- ✅ Microsoft OAuth 2.0
 - ✅ JWT token management
 - ✅ Auto-refresh tokens
 - ✅ Secure route guards

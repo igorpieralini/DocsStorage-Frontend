@@ -3,7 +3,7 @@
 
 export const OAuthConfig = {
   google: {
-    clientId: '141549696314-a9lmve9lksegeisopjc881npe71vncas.apps.googleusercontent.com',
+    clientId: '1015085655063-2odhes7689glov1scjdt0g4lo1hlm837.apps.googleusercontent.com',
     scopes: 'profile email https://www.googleapis.com/auth/drive.file',
     redirectUri: 'http://localhost:4200/oauth/callback'
   }

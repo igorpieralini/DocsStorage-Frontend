@@ -5,7 +5,6 @@ import { MainLayoutComponent } from './components/layout/main-layout/main-layout
 import { OAuthCallbackComponent } from './components/oauth-callback/oauth-callback.component';
 import { authGuard } from './guards/auth.guard';
 import { ProfileComponent } from './components/profile/profile';
-import { SettingsComponent } from './components/settings/settings';
 import { DocumentsComponent } from './components/documents/documents';
 import { GoogleDriveComponent } from './components/google-drive/google-drive';
 import { DashboardComponent } from './components/dashboard/dashboard';
@@ -24,7 +23,6 @@ export const routes: Routes = [
       { path: 'dashboard', component: DashboardComponent },
       { path: 'documents', component: DocumentsComponent },
       { path: 'profile', component: ProfileComponent },
-      { path: 'settings', component: SettingsComponent },
       { path: 'google-drive', component: GoogleDriveComponent }
     ]
   },
